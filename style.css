@@ -1,0 +1,321 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Roboto", system-ui;
+
+    --f-medium: 500;
+    --t-color: #081239;
+    --h-color: #060e2a;
+
+    --history-color: #bd6807;
+    --animals-color: #2ca02b;
+    --sports-color: #2375bf;
+    --games-color: #4814a6;
+    --general-color: #349bcb;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(243, 243, 243);
+    overflow: hidden;
+}
+
+.menu-container {
+    background-color: white;
+    width: 340px;
+    border-radius: 6px;
+    padding: 20px;
+    box-shadow: 0px 6px 6px 0px rgba(0, 0, 0, 0.35);
+}
+
+.menu-container-heading {
+    color: var(--h-color);
+    font-size: 1.25rem;
+}
+
+.menu-container-category {
+    list-style: none;
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.menu-container-category>li {
+    cursor: pointer;
+    aspect-ratio: 1/1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: .95rem;
+    border-radius: 8px;
+    color: white;
+    transition: all 200ms ease;
+}
+
+.menu-container-category>li>span {
+    margin-bottom: 5px;
+    font-size: 1.5rem;
+}
+
+.menu-container-category>li:active {
+    transform: scale(0.95) !important;
+}
+
+.history-23 {
+    background-color: var(--history-color);
+    border: 2px solid var(--history-color);
+    transform: scale(1);
+}
+
+.history-23:hover {
+    transform: scale(1.05);
+}
+
+.animals-27 {
+    background-color: var(--animals-color);
+    border: 2px solid var(--animals-color);
+}
+
+.animals-27:hover {
+    transform: scale(1.05);
+}
+
+.sports-21 {
+    background-color: var(--sports-color);
+    border: 2px solid var(--sports-color);
+}
+
+.sports-21:hover {
+    transform: scale(1.05);
+}
+
+.games-15 {
+    background-color: var(--games-color);
+    border: 2px solid var(--games-color);
+}
+
+.games-15:hover {
+    transform: scale(1.05);
+}
+
+.general-9 {
+    background-color: var(--general-color);
+    border: 2px solid var(--general-color);
+}
+
+.general-9:hover {
+    transform: scale(1.05);
+}
+
+#startBtn {
+    margin-top: 50px;
+    width: 100%;
+    padding: 13px 10px;
+    border: none;
+    background-color: #073a9e;
+    border-radius: 4px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    align-items: center;
+    transition: 100ms;
+}
+
+#startBtn>i {
+    font-size: 1.1rem;
+}
+
+#startBtn:active {
+    transform: scale(0.98);
+}
+
+.quiz-container {
+    position: absolute;
+    inset: 0;
+    transform: translateY(-100%);;
+    pointer-events: none;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 500ms ease;
+}
+
+.quiz-card {
+    opacity: 0;
+    transform: translateY(-10px);
+    background-color: white;
+    width: 500px;
+    border-radius: 6px;
+    padding: 25px;
+    transition: opacity 250ms 700ms ease, transform 250ms 700ms ease-out;
+}
+
+#quizTitle {
+    text-transform: capitalize;
+}
+
+.quiz-tracker {
+    margin-bottom: 20px;
+}
+
+.current-question {
+    font-weight: bold;
+    color: var(--h-color);
+    display: flex;
+    justify-content: space-between;
+}
+
+.tracker-container {
+    margin-top: 5px;
+    background-color: #060e2a2a;
+    height: 4px;
+}
+
+.tracker-bar {
+    width: 0px;
+    height: inherit;
+    background-color: #081239;
+    transition: 500ms;
+}
+
+.question {
+    font-size: 1.1rem;
+    color: var(--h-color);
+}
+
+.answer-list {
+    margin-top: 20px;
+    list-style: none;
+}
+
+.answer {
+    margin-block: 10px;
+    border: 1px solid var(--t-color);
+    padding: 10px;
+    color: var(--t-color);
+    font-size: .95rem;
+    cursor: pointer;
+}
+
+#nextBtn {
+    display: none;
+    margin: 40px auto 0px;
+    padding: 10px;
+    width: 120px;
+    background-color: var(--t-color);
+    color: white;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+
+/* Loading screen style section start */
+.loading {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.836);
+    transition: 350ms;
+}
+
+.loading > .circle {
+    width: 35px;
+    border-radius: 50%;
+    border: 6px dotted black;
+    margin-bottom: 10px;
+    aspect-ratio: 1/1;
+    transform: rotate(0deg);
+    animation-name: rotateAnimation;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-fill-mode: both;
+    animation-timing-function: linear;
+}
+
+@keyframes rotateAnimation {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Loading screen style section end */
+
+.correct {
+    background-color: #04ba1b;
+    color: white;
+    border: 1px solid transparent;
+}
+
+.incorrect {
+    background-color: #ef0505;
+    color: white;
+    border: 1px solid transparent;
+}
+
+/* Finish page layout style start */
+
+.finish-page {
+    background-color: white;
+    width: 400px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+}
+
+.emoji {
+    margin-inline: auto;
+    width: 80px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    background-color: #063bad;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8rem;
+}
+
+.grade {
+    font-weight: var(--f-medium);
+    margin-top: 10px;
+    font-size: 1.6rem;
+    color: var(--h-color);
+}
+
+.short-message {
+    font-size: .9rem;
+    color: var(--t-color);
+}
+
+.back-btn {
+    background-color: var(--h-color);
+    text-decoration: none;
+    padding: 10px 20px;
+    color: white;
+    width: fit-content;
+    text-align: center;
+    font-weight: var(--f-medium);
+    margin-top: 3rem;
+    cursor: pointer;
+    font-size: .9rem;
+}
+
+
+/* Finish page layout style end */

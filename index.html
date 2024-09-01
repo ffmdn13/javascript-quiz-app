@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+
+    <!-- CSS file link -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- google font cdn link -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Quiz menu container start -->
+    <div class="menu-container">
+        <h1 class="menu-container-heading">Select the quiz type</h1>
+        <ul class="menu-container-category">
+            <li class="history-23" onclick="selectType('history-23')"><span>📜</span>History</li>
+            <li class="animals-27" onclick="selectType('animals-27')"><span>🐮</span>Animals</li>
+            <li class="sports-21" onclick="selectType('sports-21')"><span>🏋️‍♀️</span>Sports</li>
+            <li class="games-15" onclick="selectType('games-15')"><span>⚔️</span>Games</li>
+            <li class="general-9" onclick="selectType('general-9')"><span>📖</span>General</li>
+        </ul>
+        <button id="startBtn">Start Quiz</button>
+    </div>
+    <!-- Quiz menu container end -->
+
+    <!-- Quiz container section start -->
+    <div class="quiz-container">
+        <div class="quiz-card">
+            <div class="quiz-tracker">
+                <div class="current-question">
+                    <span id="quizTitle"></span>
+                    <span id="currentQuestion">1/10</span>
+                </div>
+                <div class="tracker-container">
+                    <div class="tracker-bar"></div>
+                </div>
+            </div>
+            <div id="question-container">
+                <h1 class="question"></h1>
+                <ul class="answer-list"></ul>
+            </div>
+            <button id="nextBtn">Next</button>
+        </div>
+    </div>
+    <!-- Quiz container section end -->
+
+    <!-- Loading screen section start -->
+    <div class="loading">
+        <div class="circle"></div>
+        Fetching data, please wait...
+    </div>
+    <!-- Loading screen section end -->
+
+    <!-- JS script file link -->
+    <script src="index.js"></script>
+</body>
+
+</html>
