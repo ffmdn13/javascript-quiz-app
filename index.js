@@ -1,3 +1,18 @@
+let difficulty = "easy";
+let numberOfQuestions = 10;
+
+let selectedType = null;
+let hasSelected = false;
+let currentQuestion = 0;
+
+let correctAnswer = "";
+let shuffledQuestion = [];
+let results = null;
+
+let hasAnswered = false;
+let currentTrackerWidth = 0;
+let numberOfCorrectAnswer = 0;
+
 const startBtn = document.querySelector("#startBtn");
 const quizTypes = document.querySelectorAll(".menu-container-category li");
 const quizContainer = document.querySelector(".quiz-container");
@@ -12,7 +27,6 @@ const menuContainer = document.querySelector(".menu-container");
 
 const questionNumber = document.querySelector("#currentQuestion");
 const HEX = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
-const TRACKERWIDTH = 500 / 10;
 
 const trackerBar = document.querySelector(".tracker-bar");
 const quizCard = document.querySelector(".quiz-card");
@@ -31,19 +45,10 @@ const scoreMessages = {
     }
 };
 
-let selectedType = null;
-let hasSelected = false;
-let currentQuestion = 0;
+const settingPage = document.querySelector(".setting-page");
+const quizDifficulty = document.querySelector("#difficulty");
+const quizQuestions = document.querySelector("#numberOfQuestions");
 
-let correctAnswer = "";
-let shuffledQuestion = [];
-let results = null;
-
-let hasAnswered = false;
-let currentTrackerWidth = 0;
-let numberOfCorrectAnswer = 0;
-
-// Select animation handler for menu-container-category element class
 const selectType = (type) => {
     let li = document.querySelector("li." + type);
 
@@ -64,7 +69,6 @@ const selectType = (type) => {
     }
 }
 
-// Start the quiz button handler
 startBtn.addEventListener("click", () => {
     if (selectedType === null) {
         return false;
@@ -76,11 +80,12 @@ startBtn.addEventListener("click", () => {
     let splitSelectedType = selectedType.classList.value.split("-");
     let quizId = splitSelectedType[1] ?? null;
 
-
-
-    fetch(`https://opentdb.com/api.php?amount=10&category=${quizId}&difficulty=medium&type=multiple&`)
+    fetch(`https://opentdb.com/api.php?amount=${numberOfQuestions}&category=${quizId}&difficulty=${difficulty}&type=multiple`)
         .then(response => response.json())
-        .then(data => startQuiz(data.results))
+        .then(data => {
+            console.log(data.results);
+            startQuiz(data.results)
+        })
         .then(() => {
             loadingScreen.style.opacity = null;
             loadingScreen.style.pointerEvents = null;
@@ -106,7 +111,7 @@ const renderQuiz = (results) => {
     correctAnswer = results[currentQuestion].correct_answer;
     quizTitle.innerText = results[0].category;
     questionTitle.innerText = results[currentQuestion].question;
-    questionNumber.innerText = `${currentQuestion + 1}/10`;
+    questionNumber.innerText = `${currentQuestion + 1}/${numberOfQuestions}`;
     answerList.innerHTML = `
                 <li class="answer" onclick="answer(event)">${shuffledQuestion[0]}</li>
                 <li class="answer" onclick="answer(event)">${shuffledQuestion[1]}</li>
@@ -131,12 +136,16 @@ const answer = (event) => {
             if (data.innerText === correctAnswer) {
                 data.classList.add("correct");
             }
-            console.log(data.innerText);
         }
     }
 
-    if (currentQuestion + 1 === 10) {
+    if (currentQuestion + 1 === numberOfQuestions) {
         nextBtn.innerText = "Finish";
+    }
+
+    if (currentTrackerWidth < 450) {
+        currentTrackerWidth = currentTrackerWidth + (Math.floor(450 / numberOfQuestions));
+        trackerBar.style.width = currentTrackerWidth + "px";
     }
 
     hasAnswered = true;
@@ -144,7 +153,7 @@ const answer = (event) => {
 };
 
 nextBtn.addEventListener("click", () => {
-    if (currentQuestion + 1 === 10) {
+    if (currentQuestion + 1 === numberOfQuestions) {
         renderResultPage();
         return;
     }
@@ -153,22 +162,18 @@ nextBtn.addEventListener("click", () => {
     hasAnswered = false;
     nextBtn.style.display = "none";
 
-    if (currentTrackerWidth < 450) {
-        currentTrackerWidth += TRACKERWIDTH;
-        trackerBar.style.width = currentTrackerWidth + "px";
-    }
-
     setRandomBackgroundColor();
     renderQuiz(results);
 });
 
 const renderResultPage = () => {
-    let scoreMessage = getScoreMessage(numberOfCorrectAnswer * 10);
+    numberOfCorrectAnswer = (Math.floor(100 / numberOfQuestions)) * numberOfCorrectAnswer;
+    let scoreMessage = getScoreMessage(numberOfCorrectAnswer);
 
     quizContainer.innerHTML = `
         <div class="finish-page">
             <div class="emoji">${scoreMessage[0]}</div>
-            <div class="grade">${numberOfCorrectAnswer * 10}/100</div>
+            <div class="grade">${numberOfCorrectAnswer}/100</div>
             <p class="short-message">${scoreMessage[1]}</p>
 
             <a href="index.html" class="back-btn">Start new quiz</a>
@@ -188,12 +193,14 @@ const setRandomBackgroundColor = () => {
 }
 
 const shuffleQuestion = (questions) => {
-    for (let i = questions.length - 1; i > 0; i--) {
-        let index = Math.floor(Math.random() * (i + 1));
-        let temp = questions[i];
+    for (let i = 1; i <= 2; i++) {
+        for (let j = questions.length - 1; j > 0; j--) {
+            let index = Math.floor(Math.random() * (j + 1));
+            let temp = questions[j];
 
-        questions[i] = questions[index];
-        questions[index] = temp;
+            questions[j] = questions[index];
+            questions[index] = temp;
+        }
     }
 
     return questions;
@@ -225,3 +232,16 @@ const getScoreMessage = (score) => {
     }
 }
 
+const renderSettingPage = () => {
+    if (settingPage.classList.contains("block")) {
+        settingPage.classList.remove("block");
+        return;
+    }
+
+    settingPage.classList.add("block");
+}
+
+const setQuizSetting = () => {
+    numberOfQuestions = +quizQuestions.value;
+    difficulty = quizDifficulty.value;
+};

@@ -32,9 +32,75 @@ body {
     box-shadow: 0px 6px 6px 0px rgba(0, 0, 0, 0.35);
 }
 
+.menu-container-heading-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-container-heading-container>div {
+    position: relative;
+}
+
 .menu-container-heading {
     color: var(--h-color);
     font-size: 1.25rem;
+}
+
+.menu-container-setting-btn {
+    border: none;
+    background-color: transparent;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.menu-container-setting-btn:active {
+    transform: scale(0.96);
+}
+
+.setting-page {
+    display: none;
+    background-color: white;
+    border-radius: 6px;
+    padding: 20px;
+    position: absolute;
+    top: -17px;
+    left: 60px;
+    display: none;
+    box-shadow: 0px 6px 6px 0px rgba(0, 0, 0, 0.35);
+}
+
+.setting-page input,
+.setting-page select {
+    border: none;
+    border-bottom: 1px solid var(--h-color);
+    outline: 1px solid transparent;
+    width: 200px;
+}
+
+.setting-page label {
+    color: var(--t-color);
+    margin-bottom: .7rem;
+    display: block;
+    font-weight: var(--f-medium);
+}
+
+.setting-page > div {
+    margin-bottom: 20px;
+}
+
+.setting-btn {
+    border: none;
+    background-color: var(--t-color);
+    color: white;
+    padding: 10px;
+    width: 90px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.setting-btn:active {
+    transform: scale(0.96);
 }
 
 .menu-container-category {
@@ -141,7 +207,8 @@ body {
 .quiz-container {
     position: absolute;
     inset: 0;
-    transform: translateY(-100%);;
+    transform: translateY(-100%);
+    ;
     pointer-events: none;
     background-color: black;
     display: flex;
@@ -233,7 +300,7 @@ body {
     transition: 350ms;
 }
 
-.loading > .circle {
+.loading>.circle {
     width: 35px;
     border-radius: 50%;
     border: 6px dotted black;
@@ -319,3 +386,7 @@ body {
 
 
 /* Finish page layout style end */
+
+.block {
+    display: block;
+}

@@ -21,7 +21,27 @@
 
     <!-- Quiz menu container start -->
     <div class="menu-container">
-        <h1 class="menu-container-heading">Select the quiz type</h1>
+        <div class="menu-container-heading-container">
+            <h1 class="menu-container-heading">Select the quiz type</h1>
+            <div>
+                <button class="menu-container-setting-btn" onclick="renderSettingPage()">⚙️</button>
+                <div class="setting-page">
+                    <div>
+                        <label for="numberOfQuestion">Number of questions</label>
+                        <input type="number" id="numberOfQuestions" min="5" max="100">
+                    </div>
+                    <div>
+                        <label for="difficulty">Quiz difficulty</label>
+                        <select name="" id="difficulty" aria-valuemax="10">
+                            <option value="easy">Easy</option>
+                            <option value="medium">Medium</option>
+                            <option value="hard">Hard</option>
+                        </select>
+                    </div>
+                    <button class="setting-btn" onclick="setQuizSetting()">Change</button>
+                </div>
+            </div>
+        </div>
         <ul class="menu-container-category">
             <li class="history-23" onclick="selectType('history-23')"><span>📜</span>History</li>
             <li class="animals-27" onclick="selectType('animals-27')"><span>🐮</span>Animals</li>
