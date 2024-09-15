@@ -1,5 +1,5 @@
+let questionAmount = 10;
 let difficulty = "easy";
-let numberOfQuestions = 10;
 
 let selectedType = null;
 let hasSelected = false;
@@ -80,12 +80,9 @@ startBtn.addEventListener("click", () => {
     let splitSelectedType = selectedType.classList.value.split("-");
     let quizId = splitSelectedType[1] ?? null;
 
-    fetch(`https://opentdb.com/api.php?amount=${numberOfQuestions}&category=${quizId}&difficulty=${difficulty}&type=multiple`)
+    fetch(`https://opentdb.com/api.php?amount=${questionAmount}&category=${quizId}&difficulty=${difficulty}&type=multiple`)
         .then(response => response.json())
-        .then(data => {
-            console.log(data.results);
-            startQuiz(data.results)
-        })
+        .then(data => startQuiz(data.results))
         .then(() => {
             loadingScreen.style.opacity = null;
             loadingScreen.style.pointerEvents = null;
@@ -111,7 +108,7 @@ const renderQuiz = (results) => {
     correctAnswer = results[currentQuestion].correct_answer;
     quizTitle.innerText = results[0].category;
     questionTitle.innerText = results[currentQuestion].question;
-    questionNumber.innerText = `${currentQuestion + 1}/${numberOfQuestions}`;
+    questionNumber.innerText = `${currentQuestion + 1}/${questionAmount}`;
     answerList.innerHTML = `
                 <li class="answer" onclick="answer(event)">${shuffledQuestion[0]}</li>
                 <li class="answer" onclick="answer(event)">${shuffledQuestion[1]}</li>
@@ -139,12 +136,12 @@ const answer = (event) => {
         }
     }
 
-    if (currentQuestion + 1 === numberOfQuestions) {
+    if (currentQuestion + 1 === questionAmount) {
         nextBtn.innerText = "Finish";
     }
 
     if (currentTrackerWidth < 450) {
-        currentTrackerWidth = currentTrackerWidth + (Math.floor(450 / numberOfQuestions));
+        currentTrackerWidth = currentTrackerWidth + (Math.floor(450 / questionAmount));
         trackerBar.style.width = currentTrackerWidth + "px";
     }
 
@@ -153,7 +150,7 @@ const answer = (event) => {
 };
 
 nextBtn.addEventListener("click", () => {
-    if (currentQuestion + 1 === numberOfQuestions) {
+    if (currentQuestion + 1 === questionAmount) {
         renderResultPage();
         return;
     }
@@ -166,8 +163,8 @@ nextBtn.addEventListener("click", () => {
     renderQuiz(results);
 });
 
-const renderResultPage = () => {
-    numberOfCorrectAnswer = (Math.floor(100 / numberOfQuestions)) * numberOfCorrectAnswer;
+function renderResultPage() { 
+    numberOfCorrectAnswer = (Math.floor(100 / questionAmount)) * numberOfCorrectAnswer;
     let scoreMessage = getScoreMessage(numberOfCorrectAnswer);
 
     quizContainer.innerHTML = `
@@ -181,7 +178,7 @@ const renderResultPage = () => {
     `;
 }
 
-const setRandomBackgroundColor = () => {
+function setRandomBackgroundColor() { 
     let randomHex = "#";
 
     for (let i = 0; i < 6; i++) {
@@ -192,7 +189,7 @@ const setRandomBackgroundColor = () => {
     quizContainer.style.backgroundColor = randomHex;
 }
 
-const shuffleQuestion = (questions) => {
+function shuffleQuestion(questions) {
     for (let i = 1; i <= 2; i++) {
         for (let j = questions.length - 1; j > 0; j--) {
             let index = Math.floor(Math.random() * (j + 1));
@@ -206,42 +203,69 @@ const shuffleQuestion = (questions) => {
     return questions;
 }
 
-const getScoreMessage = (score) => {
+function getScoreMessage(score) {
     let emojiIcon = null;
     let message = null;
 
-    if (score < 70) {
-        emojiIcon = scoreMessages.low.emoji[Math.floor(Math.random() * 3)];
-        message = scoreMessages.low.message[Math.floor(Math.random() * 3)];
+    switch(true) {
+        case score <= 70:
+            emojiIcon = scoreMessages.low.emoji[Math.floor(Math.random() * 3)];
+            message = scoreMessages.low.message[Math.floor(Math.random() * 3)];
+            break;
+    
+        case score <= 80:
+            emojiIcon = scoreMessages.medium.emoji[Math.floor(Math.random() * 3)];
+            message = scoreMessages.medium.message[Math.floor(Math.random() * 3)];
+            break;
 
-        return [emojiIcon, message];
+        case score <= 100:
+            emojiIcon = scoreMessages.high.emoji[Math.floor(Math.random() * 3)];
+            message = scoreMessages.high.message[Math.floor(Math.random() * 3)];
+            break;
+
+        default:
+            console.log("makanbang");
     }
 
-    if (score <= 80) {
-        emojiIcon = scoreMessages.medium.emoji[Math.floor(Math.random() * 3)];
-        message = scoreMessages.medium.message[Math.floor(Math.random() * 3)];
-
-        return [emojiIcon, message];
-    }
-
-    if (score <= 100) {
-        emojiIcon = scoreMessages.high.emoji[Math.floor(Math.random() * 3)];
-        message = scoreMessages.high.message[Math.floor(Math.random() * 3)];
-
-        return [emojiIcon, message];
-    }
+    return [emojiIcon, message];
 }
 
-const renderSettingPage = () => {
-    if (settingPage.classList.contains("block")) {
-        settingPage.classList.remove("block");
+function shuffleQuestion(questions) {
+    for (let i = 1; i <= 2; i++) {
+        for (let j = questions.length - 1; j > 0; j--) {
+            let index = Math.floor(Math.random() * (j + 1));
+            let temp = questions[j];
+
+            questions[j] = questions[index];
+            questions[index] = temp;
+        }
+    }
+
+    return questions;
+}
+
+function renderSettingPage() {
+    if (settingPage.classList.contains("opacity-1")) {
+        settingPage.classList.remove("opacity-1", "pointer-events-all");
+        settingPage.style.transform = null;
         return;
     }
 
-    settingPage.classList.add("block");
+    settingPage.classList.add("opacity-1", "pointer-events-all");
+    settingPage.style.transform = "translateX(0)";
 }
 
-const setQuizSetting = () => {
-    numberOfQuestions = +quizQuestions.value;
+function setQuizSetting() {
+    questionAmount = +quizQuestions.value;
     difficulty = quizDifficulty.value;
-};
+
+    if(questionAmount <= 0 || questionAmount >=51) {
+        quizQuestions.value = 10;  
+        questionAmount = 10; 
+    }
+
+    if(!['easy', 'medium', 'hard'].includes(difficulty)) {
+        quizDifficulty.value = "easy";
+        difficulty = "easy";
+    }
+}
