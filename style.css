@@ -24,6 +24,32 @@ body {
     overflow: hidden;
 }
 
+/* notification card style start */
+
+.notification-card {
+    position: absolute;
+    z-index: 100;
+    opacity: 0;
+    top: -10px;
+    padding: 15px;
+    border-radius: 6px;
+    font-size: .95rem;
+    transition: all 150ms ease-out;
+}
+
+.alert {
+    background-color: #f6947f;
+    color: #aa2305;
+    border: 1px solid #f27055;
+}
+
+.info {
+    background-color: #aed0f6;
+    border: 1px solid #7eb6f5;
+    color: #0b59b0;
+}
+
+/* notification card style end */
 
 
 

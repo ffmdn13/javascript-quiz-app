@@ -30,10 +30,11 @@ const HEX = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D
 
 const trackerBar = document.querySelector(".tracker-bar");
 const quizCard = document.querySelector(".quiz-card");
-
 const settingPage = document.querySelector(".setting-page");
+
 const quizDifficulty = document.querySelector("#difficulty");
 const quizQuestions = document.querySelector("#numberOfQuestions");
+const notificationCard = document.querySelector(".notification-card");
 
 function selectQuizType(type) {
     let li = document.querySelector("li." + type);
@@ -63,7 +64,7 @@ function selectQuizType(type) {
 
 function startQuiz() {
     if (selectedType === null) {
-        return false;
+        return setNotification("⚠️ You have to select the quiz type first", "alert");
     }
 
     loadingScreen.classList.add("opacity-1", "pointer-events-all");
@@ -110,7 +111,7 @@ function renderQuiz(results) {
 
 function answer(event) {
     if (hasAnswered === true) {
-        return;
+        return setNotification("📢 You have already answered this question", "info");
     }
 
     if (event.target.innerText === correctAnswer) {
@@ -274,4 +275,15 @@ function getScoreMessages() {
             message: ["Perfectly hit the mark!", "Fantastic achievement!", "Brilliant performance!"]
         }
     };
+}
+
+function setNotification(message, type) {
+    notificationCard.classList.add(type, "opacity-1");
+    notificationCard.style.top = "10px";
+    notificationCard.innerText = message;
+
+    setTimeout(function () {
+        notificationCard.classList.remove(type, "opacity-1");
+        notificationCard.style.top = null;
+    }, 3000);
 }
