@@ -24,6 +24,10 @@ body {
     overflow: hidden;
 }
 
+
+
+
+/* quiz menu container style start */
 .menu-container {
     background-color: white;
     width: 340px;
@@ -54,7 +58,8 @@ body {
     cursor: pointer;
 }
 
-.menu-container-setting-btn:active {
+.menu-container-setting-btn:active,
+.setting-btn:active  {
     transform: scale(0.96);
 }
 
@@ -87,7 +92,7 @@ body {
     font-weight: var(--f-medium);
 }
 
-.setting-page > div {
+.setting-page>div {
     margin-bottom: 20px;
 }
 
@@ -99,10 +104,6 @@ body {
     width: 90px;
     cursor: pointer;
     border-radius: 4px;
-}
-
-.setting-btn:active {
-    transform: scale(0.96);
 }
 
 .menu-container-category {
@@ -141,7 +142,11 @@ body {
     transform: scale(1);
 }
 
-.history-23:hover {
+.history-23:hover,
+.animals-27:hover,
+.sports-21:hover,
+.games-15:hover,
+.general-9:hover  {
     transform: scale(1.05);
 }
 
@@ -150,17 +155,9 @@ body {
     border: 2px solid var(--animals-color);
 }
 
-.animals-27:hover {
-    transform: scale(1.05);
-}
-
 .sports-21 {
     background-color: var(--sports-color);
     border: 2px solid var(--sports-color);
-}
-
-.sports-21:hover {
-    transform: scale(1.05);
 }
 
 .games-15 {
@@ -168,17 +165,9 @@ body {
     border: 2px solid var(--games-color);
 }
 
-.games-15:hover {
-    transform: scale(1.05);
-}
-
 .general-9 {
     background-color: var(--general-color);
     border: 2px solid var(--general-color);
-}
-
-.general-9:hover {
-    transform: scale(1.05);
 }
 
 #startBtn {
@@ -206,11 +195,15 @@ body {
     transform: scale(0.98);
 }
 
+/* quiz menu container style end */
+
+
+
+/* quiz question container style start */
 .quiz-container {
     position: absolute;
     inset: 0;
     transform: translateY(-100%);
-    ;
     pointer-events: none;
     background-color: black;
     display: flex;
@@ -277,7 +270,6 @@ body {
 }
 
 #nextBtn {
-    display: none;
     margin: 40px auto 0px;
     padding: 10px;
     width: 120px;
@@ -288,7 +280,11 @@ body {
     cursor: pointer;
 }
 
-/* Loading screen style section start */
+/* quiz question container selty style end */
+
+
+
+/* loading screen style start */
 .loading {
     opacity: 0;
     pointer-events: none;
@@ -322,8 +318,6 @@ body {
     }
 }
 
-/* Loading screen style section end */
-
 .correct {
     background-color: #04ba1b;
     color: white;
@@ -336,9 +330,12 @@ body {
     border: 1px solid transparent;
 }
 
-/* Finish page layout style start */
+/* loading screen style end */
 
-.finish-page {
+
+
+/* result page style start */
+.result-page {
     background-color: white;
     width: 400px;
     height: 300px;
@@ -386,11 +383,18 @@ body {
     font-size: .9rem;
 }
 
+/* result page style end */
 
-/* Finish page layout style end */
 
-.block {
+
+/* utility class style start */
+
+.display-block {
     display: block;
+}
+
+.display-none {
+    display: none;
 }
 
 .opacity-1 {
@@ -400,3 +404,5 @@ body {
 .pointer-events-all {
     pointer-events: all;
 }
+
+/* utility class style end */

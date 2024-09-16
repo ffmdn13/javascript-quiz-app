@@ -30,26 +30,12 @@ const HEX = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D
 
 const trackerBar = document.querySelector(".tracker-bar");
 const quizCard = document.querySelector(".quiz-card");
-const scoreMessages = {
-    low: {
-        emoji: ["📅", "📚", "📋"],
-        message: ["Continue learning", "Checklist needed", "Plan and prepare"],
-    },
-    medium: {
-        emoji: ["📈", "🏋️", "🔥"],
-        message: ["Study and refine!", "Lift your performance higher!", "Read and improve!"]
-    },
-    high: {
-        emoji: ["🏆", "🏅", "🎯"],
-        message: ["Perfectly hit the mark!", "Fantastic achievement!", "Brilliant performance!"]
-    }
-};
 
 const settingPage = document.querySelector(".setting-page");
 const quizDifficulty = document.querySelector("#difficulty");
 const quizQuestions = document.querySelector("#numberOfQuestions");
 
-const selectType = (type) => {
+function selectQuizType(type) {
     let li = document.querySelector("li." + type);
 
     if (li === selectedType) {
@@ -59,50 +45,55 @@ const selectType = (type) => {
 
         hasSelected = false;
         selectedType = null;
-    } else if (hasSelected === false) {
+
+        return;
+    }
+
+    if (hasSelected === false) {
         for (data of quizTypes) {
             if (data !== li) data.style.opacity = "0.5";
         }
 
         hasSelected = true;
         selectedType = li;
+
+        return;
     }
 }
 
-startBtn.addEventListener("click", () => {
+function startQuiz() {
     if (selectedType === null) {
         return false;
     }
 
-    loadingScreen.style.opacity = "1";
-    loadingScreen.style.pointerEvents = "all";
-
+    loadingScreen.classList.add("opacity-1", "pointer-events-all");
     let splitSelectedType = selectedType.classList.value.split("-");
     let quizId = splitSelectedType[1] ?? null;
 
     fetch(`https://opentdb.com/api.php?amount=${questionAmount}&category=${quizId}&difficulty=${difficulty}&type=multiple`)
         .then(response => response.json())
-        .then(data => startQuiz(data.results))
-        .then(() => {
-            loadingScreen.style.opacity = null;
-            loadingScreen.style.pointerEvents = null;
+        .then((data) => {
+            loadingScreen.classList.remove("opacity-1", "pointer-events-all");
+            setBackgroundColor();
 
-            setRandomBackgroundColor();
+            quizContainer.classList.add("opacity-1", "pointer-events-all");
             quizContainer.style.transform = "translateY(0)";
-            quizContainer.style.pointerEvents = "all";
-            quizContainer.firstElementChild.style.opacity = "1";
+            quizContainer.firstElementChild.classList.add("opacity-1");
             quizContainer.firstElementChild.style.transform = "translateY(0)";
-            menuContainer.style.display = "none";
-        })
-        .catch(error => console.error(error));
-});
+            menuContainer.classList.add("display-none");
 
-const startQuiz = (data) => {
+            return data;
+        })
+        .then(data => initializeQuiz(data.results))
+        .catch(error => console.error(error));
+}
+
+function initializeQuiz(data) {
     if (results === null) results = data;
     renderQuiz(results);
 }
 
-const renderQuiz = (results) => {
+function renderQuiz(results) {
     shuffledQuestion = shuffleQuestion([...results[currentQuestion].incorrect_answers, results[currentQuestion].correct_answer]);
 
     correctAnswer = results[currentQuestion].correct_answer;
@@ -117,7 +108,7 @@ const renderQuiz = (results) => {
     `;
 };
 
-const answer = (event) => {
+function answer(event) {
     if (hasAnswered === true) {
         return;
     }
@@ -146,39 +137,39 @@ const answer = (event) => {
     }
 
     hasAnswered = true;
-    nextBtn.style.display = "block";
+
+    nextBtn.classList.replace("display-none", "display-block");
 };
 
-nextBtn.addEventListener("click", () => {
+function nextQuestion() {
     if (currentQuestion + 1 === questionAmount) {
-        renderResultPage();
-        return;
+        return renderResultPage();
     }
 
     currentQuestion++;
     hasAnswered = false;
-    nextBtn.style.display = "none";
+    nextBtn.classList.replace("display-block", "display-none")
+    setBackgroundColor();
 
-    setRandomBackgroundColor();
-    renderQuiz(results);
-});
+    return renderQuiz(results);
+}
 
-function renderResultPage() { 
+function renderResultPage() {
     numberOfCorrectAnswer = (Math.floor(100 / questionAmount)) * numberOfCorrectAnswer;
-    let scoreMessage = getScoreMessage(numberOfCorrectAnswer);
+    let scoreInformations = getScoreInformations(numberOfCorrectAnswer);
 
     quizContainer.innerHTML = `
-        <div class="finish-page">
-            <div class="emoji">${scoreMessage[0]}</div>
+        <div class="result-page">
+            <div class="emoji">${scoreInformations[0]}</div>
             <div class="grade">${numberOfCorrectAnswer}/100</div>
-            <p class="short-message">${scoreMessage[1]}</p>
+            <p class="short-message">${scoreInformations[1]}</p>
 
             <a href="index.html" class="back-btn">Start new quiz</a>
         </div>
     `;
 }
 
-function setRandomBackgroundColor() { 
+function setBackgroundColor() {
     let randomHex = "#";
 
     for (let i = 0; i < 6; i++) {
@@ -203,16 +194,17 @@ function shuffleQuestion(questions) {
     return questions;
 }
 
-function getScoreMessage(score) {
+function getScoreInformations(score) {
     let emojiIcon = null;
     let message = null;
+    const scoreMessages = getScoreMessages();
 
-    switch(true) {
+    switch (true) {
         case score <= 70:
             emojiIcon = scoreMessages.low.emoji[Math.floor(Math.random() * 3)];
             message = scoreMessages.low.message[Math.floor(Math.random() * 3)];
             break;
-    
+
         case score <= 80:
             emojiIcon = scoreMessages.medium.emoji[Math.floor(Math.random() * 3)];
             message = scoreMessages.medium.message[Math.floor(Math.random() * 3)];
@@ -222,9 +214,6 @@ function getScoreMessage(score) {
             emojiIcon = scoreMessages.high.emoji[Math.floor(Math.random() * 3)];
             message = scoreMessages.high.message[Math.floor(Math.random() * 3)];
             break;
-
-        default:
-            console.log("makanbang");
     }
 
     return [emojiIcon, message];
@@ -259,13 +248,30 @@ function setQuizSetting() {
     questionAmount = +quizQuestions.value;
     difficulty = quizDifficulty.value;
 
-    if(questionAmount <= 0 || questionAmount >=51) {
-        quizQuestions.value = 10;  
-        questionAmount = 10; 
+    if (questionAmount <= 0 || questionAmount >= 51) {
+        quizQuestions.value = 10;
+        questionAmount = 10;
     }
 
-    if(!['easy', 'medium', 'hard'].includes(difficulty)) {
+    if (!['easy', 'medium', 'hard'].includes(difficulty)) {
         quizDifficulty.value = "easy";
         difficulty = "easy";
     }
+}
+
+function getScoreMessages() {
+    return {
+        low: {
+            emoji: ["📅", "📚", "📋"],
+            message: ["Continue learning", "Checklist needed", "Plan and prepare"],
+        },
+        medium: {
+            emoji: ["📈", "🏋️", "🔥"],
+            message: ["Study and refine!", "Lift your performance higher!", "Read and improve!"]
+        },
+        high: {
+            emoji: ["🏆", "🏅", "🎯"],
+            message: ["Perfectly hit the mark!", "Fantastic achievement!", "Brilliant performance!"]
+        }
+    };
 }

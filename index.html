@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz App</title>
 
-    <!-- CSS file link -->
+    <!-- css link -->
     <link rel="stylesheet" href="style.css">
 
     <!-- google font cdn link -->
@@ -19,7 +19,7 @@
 
 <body>
 
-    <!-- Quiz menu container start -->
+    <!-- quiz menu container start-->
     <div class="menu-container">
         <div class="menu-container-heading-container">
             <h1 class="menu-container-heading">Select the quiz type</h1>
@@ -43,17 +43,20 @@
             </div>
         </div>
         <ul class="menu-container-category">
-            <li class="history-23" onclick="selectType('history-23')"><span>📜</span>History</li>
-            <li class="animals-27" onclick="selectType('animals-27')"><span>🐮</span>Animals</li>
-            <li class="sports-21" onclick="selectType('sports-21')"><span>🏋️‍♀️</span>Sports</li>
-            <li class="games-15" onclick="selectType('games-15')"><span>⚔️</span>Games</li>
-            <li class="general-9" onclick="selectType('general-9')"><span>📖</span>General</li>
+            <li class="history-23" onclick="selectQuizType('history-23')"><span>📜</span>History</li>
+            <li class="animals-27" onclick="selectQuizType('animals-27')"><span>🐮</span>Animals</li>
+            <li class="sports-21" onclick="selectQuizType('sports-21')"><span>🏋️‍♀️</span>Sports</li>
+            <li class="games-15" onclick="selectQuizType('games-15')"><span>⚔️</span>Games</li>
+            <li class="general-9" onclick="selectQuizType('general-9')"><span>📖</span>General</li>
         </ul>
-        <button id="startBtn">Start Quiz</button>
+        <button id="startBtn" onclick="startQuiz()">Start Quiz</button>
     </div>
-    <!-- Quiz menu container end -->
+    <!-- quiz menu container end -->
 
-    <!-- Quiz container section start -->
+
+
+
+    <!-- quiz question container start -->
     <div class="quiz-container">
         <div class="quiz-card">
             <div class="quiz-tracker">
@@ -69,19 +72,25 @@
                 <h1 class="question"></h1>
                 <ul class="answer-list"></ul>
             </div>
-            <button id="nextBtn">Next</button>
+            <button id="nextBtn" class="display-none" onclick="nextQuestion()">Next</button>
         </div>
     </div>
-    <!-- Quiz container section end -->
+    <!-- quiz question container end-->
 
-    <!-- Loading screen section start -->
+
+
+
+    <!-- loading screen start -->
     <div class="loading">
         <div class="circle"></div>
         Fetching data, please wait...
     </div>
-    <!-- Loading screen section end -->
+    <!-- loading screen end -->
 
-    <!-- JS script file link -->
+
+
+
+    <!-- javscript link -->
     <script src="index.js"></script>
 </body>
 
